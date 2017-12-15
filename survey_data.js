@@ -1,19 +1,43 @@
 // Hard coded input questions
 module.exports = [
     {
-        text: 'Hey there!',
+        text: 'Welcome! Please, introduce your Fishing License Number',
         type: 'text'
     },
     {
-        text: 'Have you ever jump-kicked a lemur?',
+        text: 'Now please enter the Vessel Name',
         type: 'text'
     },
     {
-        text: 'Who is your favorite Teenage Mutant Ninja Turtle and why?',
-        type: 'text'
+        text: 'Total number of days your traps were soaked?',
+        type: 'number'
     },
     {
-        text: 'What is you location?\n In iOS please tap information then share your location.\n In Android please tap attach then your location.',
+        text: 'Total number of small lobsters caught?',
+        type: 'number'
+    },
+    {
+        text: 'Total number of rock crab caught?',
+        type: 'number'
+    },
+    {
+        text: 'Total number of sculpin caught?',
+        type: 'number'
+    },
+    {
+        text: 'Total number of cunner caught?',
+        type: 'number'
+    },
+    {
+        text: 'Please share your Location',
         type: 'text'
     }
 ];
+
+
+
+
+
+
+
+
