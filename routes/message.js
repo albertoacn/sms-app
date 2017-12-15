@@ -52,13 +52,13 @@ module.exports = function(request, response) {
 
         // If question is null, we're done!
         if (!question) {
-            return respond('Thank you for taking this survey. Goodbye!');
+            return respond('Thank you for submiting your catch. Have a good day!');
         }
 
         // Add a greeting if this is the first question
-        if (questionIndex === 0) {
-            responseMessage += 'Thank you for taking our survey! ';
-        }
+        // if (questionIndex === 0) {
+        //     responseMessage += 'Thank you for taking our survey! ';
+        // }
 
         // Add question text
         responseMessage += question.text;
