@@ -35,7 +35,8 @@ SurveyResponseSchema.statics.advanceSurvey = function(args, cb) {
         complete: false
     }, function(err, doc) {
         surveyResponse = doc || new SurveyResponse({
-            phone: phone
+            phone: phone,
+            timestamp: timestamp
         });
         processInput();
     });
