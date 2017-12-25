@@ -63,13 +63,20 @@ $(function() {
 
     // add text responses to a table
     function freeText(results) {
-        var $responses = $('#turtleResponses');
+        var $responses = $('#responses');
         var content = '';
+        var tpl = '';
         for (var i = 0, l = results.length; i<l; i++) {
-            var turtleResponse = results[i].responses[2];
-            content += row(turtleResponse);
+            tpl += '<tr><td>' + results[i].phone + '</td>';
+            for (var j = 0, resps = results[i].responses.length; j<resps; j++) {
+                tpl += '<td>'
+                    + results[i].responses[j].answer
+                    + '</td>';
+                
+            }
+            tpl += '</tr>';
         }
-        $responses.append(content);
+        $responses.append(tpl);
     }
 
     // Load current results from server

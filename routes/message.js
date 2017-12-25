@@ -21,13 +21,17 @@ module.exports = function(request, response) {
         phone: phone,
         complete: false
     }, function(err, doc) {
-        if (!doc) {
+        if (!doc || Date.now() > doc.timestamp + 3600000) {
+            var responseMessage = '';
+            if (doc) {
+                responseMessage += 'Session expired. Restarting session... ';
+            }
             var newSurvey = new SurveyResponse({
                 phone: phone
             });
             newSurvey.save(function(err, doc) {
                 // Skip the input and just ask the first question
-                handleNextQuestion(err, doc, 0);
+                handleNextQuestion(err, doc, 0, responseMessage);
             });
         } else {
             // After the first message, start processing input
@@ -40,10 +44,10 @@ module.exports = function(request, response) {
     });
 
     // Ask the next question based on the current index
-    function handleNextQuestion(err, surveyResponse, questionIndex) {
+    function handleNextQuestion(err, surveyResponse, questionIndex, responsemsg = '') {
         var index = questionIndex;
         var question = survey[index];
-        var responseMessage = '';
+        var responseMessage = responsemsg;
 
         if (err || !surveyResponse) {
             return respond('Terribly sorry, but an error has occurred. '

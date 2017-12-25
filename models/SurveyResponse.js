@@ -4,6 +4,11 @@ var SurveyResponseSchema = new mongoose.Schema({
     // phone number of participant
     phone: String,
 
+    timestamp: {
+        type: Number,
+        default: 0
+    },
+
     // status of the participant's current response
     complete: {
         type: Boolean,
@@ -20,11 +25,13 @@ SurveyResponseSchema.statics.advanceSurvey = function(args, cb) {
     var surveyData = args.survey;
     var phone = args.phone;
     var input = args.input;
+    var timestamp = Date.now();
     var surveyResponse;
 
     // Find current incomplete
     SurveyResponse.findOne({
         phone: phone,
+        timestamp: timestamp,
         complete: false
     }, function(err, doc) {
         surveyResponse = doc || new SurveyResponse({
