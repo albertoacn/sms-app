@@ -4,10 +4,7 @@ var SurveyResponseSchema = new mongoose.Schema({
     // phone number of participant
     phone: String,
 
-    timestamp: {
-        type: Number,
-        default: 0
-    },
+    timestamp: Number,
 
     // status of the participant's current response
     complete: {

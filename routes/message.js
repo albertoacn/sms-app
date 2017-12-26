@@ -23,11 +23,13 @@ module.exports = function(request, response) {
     }, function(err, doc) {
         if (!doc || Date.now() > doc.timestamp + 3600000) {
             var responseMessage = '';
+            var timestamp = Date.now();
             if (doc) {
                 responseMessage += 'Session expired. Restarting session... ';
             }
             var newSurvey = new SurveyResponse({
-                phone: phone
+                phone: phone,
+                timestamp: timestamp
             });
             newSurvey.save(function(err, doc) {
                 // Skip the input and just ask the first question
