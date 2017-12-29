@@ -8,7 +8,15 @@ footer {
 
 table {
     margin:10px auto;
+    width: 100%;
 }
+
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+tr:nth-child(even) {background-color: #f2f2f2;}
 
 td {
     padding:5px;

@@ -22,18 +22,18 @@ SurveyResponseSchema.statics.advanceSurvey = function(args, cb) {
     var surveyData = args.survey;
     var phone = args.phone;
     var input = args.input;
-    var timestamp = Date.now();
+    //var timestamp = Date.now();
     var surveyResponse;
 
     // Find current incomplete
     SurveyResponse.findOne({
         phone: phone,
-        timestamp: timestamp,
+        //timestamp: timestamp,
         complete: false
     }, function(err, doc) {
         surveyResponse = doc || new SurveyResponse({
             phone: phone,
-            timestamp: timestamp
+            //timestamp: timestamp
         });
         processInput();
     });
@@ -46,12 +46,13 @@ SurveyResponseSchema.statics.advanceSurvey = function(args, cb) {
         var currentQuestion = surveyData[responseLength];
 
         // if there's a problem with the input, we can re-ask the same question
-        function reask() {
+        function reask(questionType) {
+            var responseMsg = 'Data not correct. Please introduce a ' + questionType;
             cb.call(surveyResponse, null, surveyResponse, responseLength);
         }
 
         // If we have no input, ask the current question again
-        if (!input) return reask();
+        if (!input) return reask(currentQuestion.type);
 
         // Otherwise use the input to answer the current question
         var questionResponse = {};
@@ -64,7 +65,7 @@ SurveyResponseSchema.statics.advanceSurvey = function(args, cb) {
             var num = Number(input);
             if (isNaN(num)) {
                 // don't update the response, return the same question
-                return reask();
+                return reask(currentQuestion.type);
             } else {
                 questionResponse.answer = num;
             }
@@ -87,7 +88,7 @@ SurveyResponseSchema.statics.advanceSurvey = function(args, cb) {
         // Save response
         surveyResponse.save(function(err) {
             if (err) {
-                reask();
+                reask(currentQuestion.type);
             } else {
                 cb.call(surveyResponse, err, surveyResponse, responseLength+1);
             }
