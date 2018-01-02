@@ -74,8 +74,8 @@ $(function() {
                     + results[i].responses[j].answer
                     + '</td>';
             }
-            tpl += '<tr><td>' + results[i].responses[resps] + '</td>';
-            tpl += '<tr><td>' + results[i].responses[resps+1] + '</td>';
+            tpl += '<td>' + results[i].responses[resps] + '</td>';
+            tpl += '<td><a href="' + results[i].responses[resps+1] + '">Download XML</a></td>';
             tpl += '</tr>';
         }
         $responses.append(tpl);
