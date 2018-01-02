@@ -1,7 +1,6 @@
 var mongoose = require('mongoose');
 var XMLWriter = require('xml-writer');
 var Dropbox = require('dropbox');
-var prompt = require('prompt');
 var url = '';
 // Define response model schema
 var SurveyResponseSchema = new mongoose.Schema({
