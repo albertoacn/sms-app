@@ -61,11 +61,6 @@ module.exports = function(request, response) {
             return respond('Thank you for submiting your catch. Have a good day!');
         }
 
-        // Add a greeting if this is the first question
-        // if (questionIndex === 0) {
-        //     responseMessage += 'Thank you for taking our survey! ';
-        // }
-
         // Add question text
         responseMessage += question.text;
 

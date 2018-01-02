@@ -34,10 +34,12 @@
   "devDependencies": {
     "bluebird": "^3.4.6",
     "chai": "^3.5.0",
+    "dropbox": "^2.5.13",
     "lodash": "^4.16.6",
     "mocha": "^3.1.2",
     "supertest": "^2.0.1",
     "supertest-promised": "^1.0.0",
+    "xml-writer": "^1.7.0",
     "xmldom": "^0.1.22",
     "xpath": "0.0.23"
   }

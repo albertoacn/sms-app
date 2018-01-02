@@ -68,12 +68,14 @@ $(function() {
         var tpl = '';
         for (var i = 0, l = results.length; i<l; i++) {
             tpl += '<tr><td>' + results[i].phone + '</td>';
-            for (var j = 0, resps = results[i].responses.length; j<resps; j++) {
+            var resps = results[i].responses.length - 2;
+            for (var j = 0; j<resps; j++) {
                 tpl += '<td>'
                     + results[i].responses[j].answer
                     + '</td>';
-                
             }
+            tpl += '<tr><td>' + results[i].responses[resps] + '</td>';
+            tpl += '<tr><td>' + results[i].responses[resps+1] + '</td>';
             tpl += '</tr>';
         }
         $responses.append(tpl);

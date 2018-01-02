@@ -1,4 +1,8 @@
 var mongoose = require('mongoose');
+var XMLWriter = require('xml-writer');
+var Dropbox = require('dropbox');
+var prompt = require('prompt');
+var url = '';
 // Define response model schema
 var SurveyResponseSchema = new mongoose.Schema({
     // phone number of participant
@@ -77,11 +81,16 @@ SurveyResponseSchema.statics.advanceSurvey = function(args, cb) {
             questionResponse.answer = input;
         }
 
-        // Save type from question
+        // // Save type from question
         questionResponse.type = currentQuestion.type;
         surveyResponse.responses.push(questionResponse);
 
         if (surveyResponse.responses.length === surveyData.length) {
+            var timestamp = Date.now();
+            surveyResponse.responses.push(timestamp);
+            xmlString = writeXML(timestamp);
+            // Upload to dropbox
+            uploadToDropbox(timestamp, xmlString);
             surveyResponse.complete = true;
         }
 
@@ -94,6 +103,52 @@ SurveyResponseSchema.statics.advanceSurvey = function(args, cb) {
             }
         });
     }
+
+    function writeXML(timestamp) {
+        xw = new XMLWriter(true);
+        xw.startDocument('1.0', 'UTF-8');
+        xw.startElement('root');
+        xw.writeAttribute('telephone_number', surveyResponse.phone);
+        xw.writeAttribute('timestamp', timestamp);
+        for(i = 0; i < surveyResponse.responses.length - 1; i++){
+            var key = surveyData[i].key;
+            var resp = surveyResponse.responses[i];
+            xw.writeElement(surveyData[i].key, surveyResponse.responses[i].answer);
+        }
+        xw.endElement();
+        xw.endDocument();
+
+        return xw.toString();
+    }
+
+    function uploadToDropbox(timestamp, contents) {
+        var dbx = new Dropbox({ accessToken: 'H0NqNBjCM7AAAAAAAAAAEmi9GJJEgNCw4Fa8pwJPe8Ly4dOaPXgC1jVrAUxaRsh8' });
+        dbx.filesUpload({ path: '/storage/' + timestamp + '.xml', contents: contents })
+                  .then(function (response) {
+                    console.log(response);
+                    shareDropboxLink(dbx, timestamp);
+                  })
+                  .catch(function (err) {
+                    console.log(err);
+                  });
+    }
+
+    function shareDropboxLink(dbx, timestamp) {
+        dbx.sharingCreateSharedLinkWithSettings({ path: '/storage/' + timestamp + '.xml', settings: {} })
+                  .then(function (response) {
+                    var url = response.url.substring(0, response.url.length - 1) + "1";
+                    surveyResponse.responses.push(url);
+                    surveyResponse.save(function(err) {
+                        if (err) {
+                            // TO DO
+                        }
+                    });
+                  })
+                  .catch(function (err) {
+                    console.log(err);
+                  });
+    }
+
 };
 
 // Export model
