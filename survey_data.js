@@ -1,14 +1,14 @@
 // Hard coded input questions
 module.exports = [
     {
-        text: 'Welcome! Please, introduce your Fishing License Number',
+        text: 'Please enter your unique identifier code',
         type: 'text',
-        key: 'fishing_license'
+        key: 'unique_identifier_code'
     },
     {
-        text: 'Now please enter the Vessel Name',
+        text: 'Licensed Fishing Area (LFA)',
         type: 'text',
-        key: 'vessel_name'
+        key: 'licensed_fishing_area'
     },
     {
         text: 'Total number of days your traps were soaked?',

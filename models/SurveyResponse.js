@@ -26,6 +26,8 @@ SurveyResponseSchema.statics.advanceSurvey = function(args, cb) {
     var phone = args.phone;
     var input = args.input;
     //var timestamp = Date.now();
+    //TO REMOVE
+    var dummy_data = ["Jessie", "Iceberg", "La playa", "Elisabeth II", "Liberty", "Inception", "Anne", "Sunrise"];
     var surveyResponse;
 
     // Find current incomplete
@@ -83,12 +85,25 @@ SurveyResponseSchema.statics.advanceSurvey = function(args, cb) {
         // // Save type from question
         questionResponse.type = currentQuestion.type;
         surveyResponse.responses.push(questionResponse);
-
-        if (surveyResponse.responses.length === surveyData.length) {
+        //TO REMOVE
+        if (responseLength == 0){
+            surveyResponse.responses.push(getRandomInt(100000,999999));
+            surveyResponse.responses.push(dummy_data[getRandomInt(0,7)]);
+            surveyResponse.responses.push(getRandomInt(100000,999999));
+        }
+        //TO MODIFY
+        if (surveyResponse.responses.length === surveyData.length + 3) {
             var timestamp = Date.now();
-            surveyResponse.responses.push(timestamp);
-            xmlString = writeXML(timestamp);
+            //surveyResponse.responses.push(timestamp);
+            var today = new Date();
+            var datestr = today.getUTCMonth() + "/" + today.getUTCDate() + "/" + today.getUTCFullYear();
+            surveyResponse.responses.push(datestr);
+            var timestr = today.getUTCHours() + ":" + today.getUTCMinutes() + ":" + today.getUTCSeconds();
+            surveyResponse.responses.push(timestr);
+            //xmlString = writeXML(timestamp);
+            xmlString = writeXML(datestr, timestr);
             // Upload to dropbox
+            //uploadToDropbox(timestamp, xmlString);
             uploadToDropbox(timestamp, xmlString);
             surveyResponse.complete = true;
         }
@@ -103,16 +118,20 @@ SurveyResponseSchema.statics.advanceSurvey = function(args, cb) {
         });
     }
 
-    function writeXML(timestamp) {
+    function writeXML(datestr, timestr) {
         xw = new XMLWriter(true);
         xw.startDocument('1.0', 'UTF-8');
         xw.startElement('root');
         xw.writeAttribute('telephone_number', surveyResponse.phone);
-        xw.writeAttribute('timestamp', timestamp);
-        for(i = 0; i < surveyResponse.responses.length - 1; i++){
-            var key = surveyData[i].key;
-            var resp = surveyResponse.responses[i];
-            xw.writeElement(surveyData[i].key, surveyResponse.responses[i].answer);
+        //xw.writeAttribute('timestamp', timestamp);
+        xw.writeElement('date', datestr);
+        xw.writeElement('time', timestr);
+        xw.writeElement(surveyData[0].key, surveyResponse.responses[0].answer);
+        xw.writeElement('harvester_vessel', surveyResponse.responses[1].answer);
+        xw.writeElement('harvester_name', surveyResponse.responses[2].answer);
+        xw.writeElement('license_number', surveyResponse.responses[3].answer);
+        for(i = 4; i < surveyResponse.responses.length - 3; i++){
+            xw.writeElement(surveyData[i-3].key, surveyResponse.responses[i].answer);
         }
         xw.endElement();
         xw.endDocument();
@@ -146,6 +165,10 @@ SurveyResponseSchema.statics.advanceSurvey = function(args, cb) {
                   .catch(function (err) {
                     console.log(err);
                   });
+    }
+
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
 };

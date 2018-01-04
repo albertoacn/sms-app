@@ -67,15 +67,23 @@ $(function() {
         var content = '';
         var tpl = '';
         for (var i = 0, l = results.length; i<l; i++) {
-            tpl += '<tr><td>' + results[i].phone + '</td>';
-            var resps = results[i].responses.length - 2;
-            for (var j = 0; j<resps; j++) {
+            tpl += '<tr>';
+            for (var j = 0; j<3; j++) {
                 tpl += '<td>'
                     + results[i].responses[j].answer
                     + '</td>';
             }
+            tpl += '<td>' + results[i].phone + '</td>';
+            tpl += '<td>' + results[i].responses[3].answer + '</td>';
+            var resps = results[i].responses.length - 3;
             tpl += '<td>' + results[i].responses[resps] + '</td>';
-            tpl += '<td><a href="' + results[i].responses[resps+1] + '">Download XML</a></td>';
+            tpl += '<td>' + results[i].responses[resps+1] + '</td>';
+            for (var j = 4; j<resps; j++) {
+                tpl += '<td>'
+                    + results[i].responses[j].answer
+                    + '</td>';
+            }
+            tpl += '<td><a href="' + results[i].responses[resps+2] + '">Download XML</a></td>';
             tpl += '</tr>';
         }
         $responses.append(tpl);
