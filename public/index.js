@@ -68,13 +68,14 @@ $(function() {
         var tpl = '';
         for (var i = 0, l = results.length; i<l; i++) {
             tpl += '<tr>';
-            for (var j = 0; j<3; j++) {
+            tpl += '<td>' + results[i].responses[0].answer + '</td>';
+            for (var j = 1; j<3; j++) {
                 tpl += '<td>'
-                    + results[i].responses[j].answer
+                    + results[i].responses[j]
                     + '</td>';
             }
             tpl += '<td>' + results[i].phone + '</td>';
-            tpl += '<td>' + results[i].responses[3].answer + '</td>';
+            tpl += '<td>' + results[i].responses[3] + '</td>';
             var resps = results[i].responses.length - 3;
             tpl += '<td>' + results[i].responses[resps] + '</td>';
             tpl += '<td>' + results[i].responses[resps+1] + '</td>';

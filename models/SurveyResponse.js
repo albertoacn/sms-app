@@ -48,7 +48,7 @@ SurveyResponseSchema.statics.advanceSurvey = function(args, cb) {
     function processInput() {
         // If we have input, use it to answer the current question
         var responseLength = surveyResponse.responses.length;
-        var index = responseLength == 0 ? 0 : responseLength - 3;
+        var index = responseLength === 0 ? 0 : responseLength - 3;
         var currentQuestion = surveyData[index];
 
         // if there's a problem with the input, we can re-ask the same question
@@ -87,7 +87,8 @@ SurveyResponseSchema.statics.advanceSurvey = function(args, cb) {
         questionResponse.type = currentQuestion.type;
         surveyResponse.responses.push(questionResponse);
         //TO REMOVE
-        if (responseLength == 0){
+        if (responseLength === 0){
+            var num = getRandomInt(100000,999999);
             surveyResponse.responses.push(getRandomInt(100000,999999));
             surveyResponse.responses.push(dummy_data[getRandomInt(0,7)]);
             surveyResponse.responses.push(getRandomInt(100000,999999));
@@ -97,9 +98,13 @@ SurveyResponseSchema.statics.advanceSurvey = function(args, cb) {
             var timestamp = Date.now();
             //surveyResponse.responses.push(timestamp);
             var today = new Date();
-            var datestr = today.getUTCMonth() + "/" + today.getUTCDate() + "/" + today.getUTCFullYear();
+            var datestr = 1 + today.getUTCMonth() + "/" + today.getUTCDate() + "/" + today.getUTCFullYear();
             surveyResponse.responses.push(datestr);
-            var timestr = today.getUTCHours() + ":" + today.getUTCMinutes() + ":" + today.getUTCSeconds();
+            var mins = today.getUTCMinutes();
+            mins = mins < 10 ? "0" + mins : mins;
+            var secs = today.getUTCSeconds();
+            secs = secs < 10 ? "0" + secs : secs;
+            var timestr = today.getUTCHours() + ":" + mins + ":" + secs;
             surveyResponse.responses.push(timestr);
             //xmlString = writeXML(timestamp);
             xmlString = writeXML(datestr, timestr);
@@ -128,10 +133,10 @@ SurveyResponseSchema.statics.advanceSurvey = function(args, cb) {
         xw.writeElement('date', datestr);
         xw.writeElement('time', timestr);
         xw.writeElement(surveyData[0].key, surveyResponse.responses[0].answer);
-        xw.writeElement('harvester_vessel', surveyResponse.responses[1].answer);
-        xw.writeElement('harvester_name', surveyResponse.responses[2].answer);
-        xw.writeElement('license_number', surveyResponse.responses[3].answer);
-        for(i = 4; i < surveyResponse.responses.length - 3; i++){
+        xw.writeElement('harvester_vessel', surveyResponse.responses[1]);
+        xw.writeElement('harvester_name', surveyResponse.responses[2]);
+        xw.writeElement('license_number', surveyResponse.responses[3]);
+        for(i = 4; i < surveyResponse.responses.length - 2; i++){
             xw.writeElement(surveyData[i-3].key, surveyResponse.responses[i].answer);
         }
         xw.endElement();
