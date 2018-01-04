@@ -48,12 +48,13 @@ SurveyResponseSchema.statics.advanceSurvey = function(args, cb) {
     function processInput() {
         // If we have input, use it to answer the current question
         var responseLength = surveyResponse.responses.length;
-        var currentQuestion = surveyData[responseLength];
+        var index = responseLength == 0 ? 0 : responseLength - 3;
+        var currentQuestion = surveyData[index];
 
         // if there's a problem with the input, we can re-ask the same question
         function reask(questionType) {
             var responseMsg = 'Data not correct. Please introduce a ' + questionType;
-            cb.call(surveyResponse, null, surveyResponse, responseLength);
+            cb.call(surveyResponse, null, surveyResponse, index);
         }
 
         // If we have no input, ask the current question again
@@ -113,7 +114,7 @@ SurveyResponseSchema.statics.advanceSurvey = function(args, cb) {
             if (err) {
                 reask(currentQuestion.type);
             } else {
-                cb.call(surveyResponse, err, surveyResponse, responseLength+1);
+                cb.call(surveyResponse, err, surveyResponse, index+1);
             }
         });
     }
