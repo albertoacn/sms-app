@@ -36,7 +36,7 @@ module.exports = [
         key: 'number_cunners'
     },
     {
-        text: 'Please share your Location',
+        text: 'Please input your Latitude and Longitude',
         type: 'text',
         key: 'gps_location'
     }
